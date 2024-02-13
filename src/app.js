@@ -27,6 +27,3 @@ const server = app.listen(PORT, () => {
 
 //Se agregan las apis a las rutas
 app.use("/api", apiRouter);
-app.use((error, req, res, next) => {
-  res.status(400).json({ message: error.message });
-});

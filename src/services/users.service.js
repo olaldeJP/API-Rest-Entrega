@@ -1,4 +1,8 @@
 import { userDaoMongoose } from "../dao/models/db/usersMongoose.js";
+import {
+  ErrorType,
+  newError,
+} from "../middlewares/errorsManagers.Middlewares.js";
 import { hashear } from "./crypt.js";
 class UsersService {
   async register(newUser) {
@@ -11,7 +15,7 @@ class UsersService {
   }
   async actualizarPasswordUser(query) {
     query.password = hashear(query.password);
-    const user = await userDaoMongoose.updateOne({
+    const user = await userDaoMongoose.updateOnePassword({
       email: query.email,
       password: query.password,
     });
@@ -27,6 +31,16 @@ class UsersService {
   }
   async borrarMuchosUsers(query) {
     const user = await userDaoMongoose.deleteMany(query);
+    return user;
+  }
+  async agregarCarrito(emailUser, _idCart) {
+    const user = await userDaoMongoose.updateCarts(emailUser, _idCart);
+  }
+  async buscarCartPorIdEnArreglo(_idCart, userEmail) {
+    const user = await userDaoMongoose.findCart(_idCart, userEmail);
+    if (!user) {
+      throw await newError(ErrorType.FORBIDDEN_USER, "THIS CART IS NOT YOURS");
+    }
     return user;
   }
 }

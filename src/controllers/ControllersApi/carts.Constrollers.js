@@ -2,115 +2,73 @@ import { productsMongoose, cartsMongoose } from "../../services/index.js";
 import { cartsService } from "../../services/carts.service.js";
 import { productService } from "../../services/products.service.js";
 import { ticketService } from "../../services/ticket.service.js";
+import { usersService } from "../../services/users.service.js";
+import {
+  ErrorType,
+  newError,
+} from "../../middlewares/errorsManagers.Middlewares.js";
 
 //Crea un nuevo carrito vacio
-export async function createNewCart(req, res) {
+export async function createNewCart(req, res, next) {
   try {
     const cartN = await cartsService.crearNuevocart({});
-    res.status(201).json(cartN);
+    await usersService.agregarCarrito(req.user.email, cartN._id);
+    res.created(cartN);
   } catch (error) {
-    res.status(400).json({
-      status: "ERROR",
-      mensaje: "Error en la solicitud de creacion de un nuevo carro",
-    });
+    next(error);
   }
 }
 
 // Agrega el producto (pID) al carrito, verifica si existe, si es asi lo agrega al carrito o lo suma, si no existe el id del carrito o producto lo informa
-export async function agregarProductosArregloCartsByCId(req, res) {
+export async function agregarProductosArregloCartsByCId(req, res, next) {
   try {
-    const cId = req.params.cid;
+    const cId = req.params.cId;
     const pId = req.params.pid;
     const cart = await cartsService.agregarProductoAlCart(cId, pId);
-    res.status(200).json({ status: "success", cart: cart });
+    res.created(cart);
   } catch (error) {
-    return res.status(500).json({ status: "ERROR", mensaje: error.message });
+    await next(error);
   }
 }
 
 // Devuelve el arreglo de productos del carrito enviado, en caos que no lo encuentre lo devuelve
-export async function mostrarCartByCId(req, res) {
+export async function mostrarCartByCId(req, res, next) {
   try {
-    const cart = await cartsService.buscarCartPorID(req.params.cid);
-    if (cart) {
-      return res.status(200).json(cart.products);
-    }
-    throw new Error();
+    const cart = await cartsService.buscarCartPorID(req.params.cId);
+    res.result(cart.products);
   } catch (error) {
-    return res
-      .status(404)
-      .json({ status: "ERROR", mensaje: "Error en mostrar la lista " });
+    next(error);
   }
 }
 
 // Envia todos los carritos que esten guardados en la base de datos.
-export async function mostrarListaDeCarts(req, res) {
+export async function mostrarListaDeCarts(req, res, next) {
   try {
     const listaCarrito = await cartsService.mostrarVarioscarts();
-    res.status(200).json(listaCarrito);
+    res.result(listaCarrito);
   } catch (error) {
-    res.status(400).json({ status: "ERROR", message: "Error en la peticion" });
+    next(error);
   }
 }
 
 //Se borra del arreglo del carrito el producto(pid) enviado
-export async function borrarProductoDelCarrito(req, res) {
+export async function borrarProductoDelCarrito(req, res, next) {
   try {
     const pid = req.params.pid;
     const cid = req.params.cId;
 
     const carritoEncontrar = await cartsService.borrarProductoAlCart(cid, pid);
     if (carritoEncontrar) {
-      return res.status(200).json({ status: "success", carritoEncontrar });
-    } else {
-      return res
-        .status(400)
-        .json({ status: "ERROR", message: "error al borrar el producto" });
+      return res.result(carritoEncontrar);
     }
+    throw await newError(ErrorType.NOT_FOUND, "ID ERROR");
   } catch (error) {
-    return res.status(400).json({ status: "ERROR", message: message.error });
-  }
-}
-
-//Se aumenta el numero de quantity del producto(pid) en el carrito (cid) enviado
-export async function actualizarProductoEnElCarrito(req, res) {
-  // pensado de la forma que el se envia desde el req.body un json { "quantity" : cantidad a agregar}
-  try {
-    const cantidad = req.body;
-    const pid = req.params.pid;
-    const cid = req.params.cId;
-
-    const carritoActualizar = await cartsMongoose.findById(cid);
-    if (carritoActualizar) {
-      var element;
-      for (let index = 0; index < carritoActualizar.products.length; index++) {
-        element = carritoActualizar.products[index];
-        if (element._id == pid) {
-          element.quantity = element.quantity + cantidad.quantity;
-          break;
-        }
-      }
-      if (element._id == pid) {
-        await carritoActualizar.save();
-
-        return res.status(200).json(carritoActualizar);
-      } else {
-        return res
-          .status(400)
-          .json({ status: "ERROR", message: "ID producto invalido" });
-      }
-    } else {
-      return res
-        .status(400)
-        .json({ status: "ERROR", message: "ID carts invalido" });
-    }
-  } catch (error) {
-    return res.status(400).json({ status: "ERROR", message: error.message });
+    next(error);
   }
 }
 
 //Se envia un arreglo, y se reemplaza por el actual en el carrito
-export async function actualizarCarrito(req, res) {
+export async function actualizarCarrito(req, res, next) {
   try {
     const nuevoArreglo = req.body.docs;
     const cid = req.params.cId;
@@ -122,18 +80,16 @@ export async function actualizarCarrito(req, res) {
     );
 
     if (carrito) {
-      return res.status(200).json(carrito);
+      return res.result(carrito);
     } else {
-      return res
-        .status(400)
-        .json({ status: "ERROR", message: "ID del carrito invalido" });
+      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     }
   } catch (error) {
-    return res.status(400).json({ status: "ERROR", message: error.message });
+    next(error);
   }
 }
 //Se reemplaza el arreglo de productos en el carrito(cid) indicado por un arreglo vacio
-export async function eliminarTodosLosProductosDelCarrito(req, res) {
+export async function eliminarTodosLosProductosDelCarrito(req, res, next) {
   try {
     const cid = req.params.cId;
 
@@ -144,14 +100,12 @@ export async function eliminarTodosLosProductosDelCarrito(req, res) {
     );
 
     if (carrito) {
-      return res.status(200).json(carrito);
+      return res.result(carrito);
     } else {
-      return res
-        .status(400)
-        .json({ status: "ERROR", message: "ID del carrito invalido" });
+      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     }
   } catch (error) {
-    return res.status(400).json({ status: "ERROR", message: error.message });
+    next(error);
   }
 }
 
@@ -160,25 +114,23 @@ export async function validUser(req, res, next) {
     if (req.user.role === "user") {
       next();
     } else {
-      return res
-        .status(200)
-        .json({ status: "error", message: "UNAUTHORIZED USER" });
+      throw await newError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER");
     }
   } catch (error) {
-    res.status(400).json({ status: "error", message: error.message });
+    next(error);
   }
 }
 
 export async function validarStockYSumar(req, res, next) {
   let suma = 1;
   try {
-    const cart = await cartsService.buscarCartPorID(req.params.cid);
+    const cart = await cartsService.buscarCartPorID(req.params.cId);
     if (!cart) {
-      throw { error: true, message: "ID NOT FOUND" };
+      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     } else {
       const valid = await cartsService.validarStock(cart);
       if (!valid) {
-        throw { error: true, message: "NO STOCK" };
+        throw await newError(ErrorType.ERROR_REQUEST, "NOT ENOUGHT STOCK");
       }
       req["cart"] = cart;
       next();
@@ -200,4 +152,17 @@ export async function finalizarCompra(req, res, next) {
     req.user.email
   );
   res.json({ status: "success", ticket: newTicket });
+}
+
+export async function validarCarroUser(req, res, next) {
+  try {
+    const _idCart = req.params.cId;
+    const cart = await usersService.buscarCartPorIdEnArreglo(
+      _idCart,
+      req.user.email
+    );
+    next();
+  } catch (error) {
+    next(error);
+  }
 }

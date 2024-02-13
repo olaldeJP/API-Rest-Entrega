@@ -38,7 +38,18 @@ class UsersDaoMonoose {
   async readMany(query) {
     return await usersMongoose.find(query).lean();
   }
-  async updateOne(query) {
+
+  async updateCarts(emailUser, _idCart) {
+    const array = await usersMongoose
+      .findOneAndUpdate(
+        { email: emailUser },
+        { $push: { carts: { _id: _idCart } } },
+        { new: true }
+      )
+      .lean();
+    return array;
+  }
+  async updateOnePassword(query) {
     const updateUser = await usersMongoose.updateOne(
       { email: query.email },
       { $set: { password: query.password } },
@@ -55,8 +66,15 @@ class UsersDaoMonoose {
   async deleteMany(query) {
     throw new Error("NOT IMPLEMENTED");
   }
+  async findCart(_idCart, userEmail) {
+    const array = await usersMongoose
+      .findOne({ email: userEmail, carts: { _id: _idCart } })
+      .lean();
+    return array;
+  }
   async devolverSinPassword(query) {
     const datosUsuario = {
+      _id: query["_id"],
       email: query["email"],
       first_name: query["first_name"],
       last_name: query["last_name"],

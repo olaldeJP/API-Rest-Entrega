@@ -16,6 +16,6 @@ export async function logout(req, res) {
       return res.status(500).json({ status: "logout error", body: err });
     }
     res.clearCookie("authorization", COOKIE_OPTS);
-    res.status(200).json({ status: "success", message: "logout OK" });
+    res.result("logout OK");
   });
 }

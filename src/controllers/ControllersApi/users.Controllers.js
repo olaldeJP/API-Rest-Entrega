@@ -4,10 +4,7 @@ import { emailService } from "../../services/email.service.js";
 export async function sesionActual(req, res) {
   try {
     if (req.user) {
-      return res.status(200).json({
-        status: "success",
-        user: req.user,
-      });
+      return res.result(req.user);
     }
     throw new Error("UNAUTHORIZED USER");
   } catch (error) {

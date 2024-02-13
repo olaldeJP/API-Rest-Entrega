@@ -2,7 +2,10 @@ import mongoose, { Schema, model } from "mongoose";
 import { cartsMongoose } from "../../../services/index.js";
 import { v4 as uuidv4 } from "uuid";
 import mongoosePaginate from "mongoose-paginate-v2";
-
+import {
+  newError,
+  ErrorType,
+} from "../../../middlewares/errorsManagers.Middlewares.js";
 const CartSchema = new Schema(
   {
     _id: { type: String, default: uuidv4 },
@@ -50,6 +53,9 @@ class CartsDaoMonoose {
 
   async addProductCart(_idC, _idP) {
     const cart = await this.readOne(_idC);
+    if (!cart) {
+      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
+    }
     const productFind = cart.products.find((p) => {
       return p._id == _idP;
     });
@@ -59,6 +65,7 @@ class CartsDaoMonoose {
       productFind.quantity++;
     }
     const updateCart = await cartsDaoMongoose.updateOne(_idC, cart);
+
     return updateCart;
   }
   async deleteOne(cid, pid) {

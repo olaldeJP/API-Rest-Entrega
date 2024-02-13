@@ -7,7 +7,7 @@ export async function saveAndSend(req, res) {
     }
     const mensaje = await messageMongoose.create(req.body);
     res["sendMessage"]();
-    res.status(200).json({ status: "success" });
+    res.accepted();
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
   }

@@ -4,10 +4,10 @@ import {
   mostrarListaDeCarts,
   mostrarCartByCId,
   createNewCart,
+  validarCarroUser,
   borrarProductoDelCarrito,
   actualizarCarrito,
   validUser,
-  actualizarProductoEnElCarrito,
   eliminarTodosLosProductosDelCarrito,
   finalizarCompra,
   restarProducts,
@@ -20,15 +20,27 @@ export const cartsRouter = new Router();
 //Carga de los controllers al router de carts
 cartsRouter.use(extraerUserCookie, validUser);
 cartsRouter.post("/", createNewCart);
-cartsRouter.post("/:cid/product/:pid", agregarProductosArregloCartsByCId);
-cartsRouter.get("/:cid", mostrarCartByCId);
-cartsRouter.get("/", mostrarListaDeCarts);
-cartsRouter.put("/:cId", actualizarCarrito);
-cartsRouter.put("/:cId/products/:pid", actualizarProductoEnElCarrito);
-cartsRouter.delete("/:cId/products/:pid", borrarProductoDelCarrito);
-cartsRouter.delete("/:cId", eliminarTodosLosProductosDelCarrito);
 cartsRouter.post(
-  "/:cid/purchase",
+  "/:cId/product/:pid",
+  validarCarroUser,
+  agregarProductosArregloCartsByCId
+);
+cartsRouter.get("/:cId", validarCarroUser, mostrarCartByCId);
+cartsRouter.get("/", mostrarListaDeCarts);
+cartsRouter.put("/:cId", validarCarroUser, actualizarCarrito);
+cartsRouter.delete(
+  "/:cId/products/:pid",
+  validarCarroUser,
+  borrarProductoDelCarrito
+);
+cartsRouter.delete(
+  "/:cId",
+  validarCarroUser,
+  eliminarTodosLosProductosDelCarrito
+);
+cartsRouter.post(
+  "/:cId/purchase",
+  validarCarroUser,
   validarStockYSumar,
   restarProducts,
   finalizarCompra

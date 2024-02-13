@@ -6,5 +6,5 @@ import {
 
 export const userRouter = new Router();
 userRouter.post("/", register, envioMail, (req, res) => {
-  res.status(201).json({ status: "success", user: req.user });
+  res.created(req.user);
 });
