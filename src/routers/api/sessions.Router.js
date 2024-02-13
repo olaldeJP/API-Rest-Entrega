@@ -26,8 +26,7 @@ sessionsRouter.post(
     res.result({
       status: "success",
       user: req.user,
-      T: req.token,
-      token: "Bearer oentuhoneuthuonethhunoethntouehntoeu",
+      TOKEN: req.token,
     });
   },
 
