@@ -151,7 +151,7 @@ export async function finalizarCompra(req, res, next) {
     req["total"],
     req.user.email
   );
-  res.json({ status: "success", ticket: newTicket });
+  res.result(newTicket);
 }
 
 export async function validarCarroUser(req, res, next) {
