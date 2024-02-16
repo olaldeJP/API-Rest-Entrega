@@ -23,11 +23,7 @@ sessionsRouter.post(
   }),
   guardarUserToken,
   async (req, res) => {
-    res.result({
-      status: "success",
-      user: req.user,
-      TOKEN: req.token,
-    });
+    res.result(req.token);
   },
 
   (error, req, res, next) => {
