@@ -5,7 +5,7 @@ import { ticketService } from "../../services/ticket.service.js";
 import { usersService } from "../../services/users.service.js";
 import {
   ErrorType,
-  newError,
+  NewError,
 } from "../../middlewares/errorsManagers.Middlewares.js";
 
 //Crea un nuevo carrito vacio
@@ -27,7 +27,7 @@ export async function agregarProductosArregloCartsByCId(req, res, next) {
     const cart = await cartsService.agregarProductoAlCart(cId, pId);
     res.created(cart);
   } catch (error) {
-    await next(error);
+    new Next(error);
   }
 }
 
@@ -61,7 +61,7 @@ export async function borrarProductoDelCarrito(req, res, next) {
     if (carritoEncontrar) {
       return res.result(carritoEncontrar);
     }
-    throw await newError(ErrorType.NOT_FOUND, "ID ERROR");
+    throw new NewError(ErrorType.NOT_FOUND, "ID ERROR");
   } catch (error) {
     next(error);
   }
@@ -82,7 +82,7 @@ export async function actualizarCarrito(req, res, next) {
     if (carrito) {
       return res.result(carrito);
     } else {
-      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     }
   } catch (error) {
     next(error);
@@ -102,7 +102,7 @@ export async function eliminarTodosLosProductosDelCarrito(req, res, next) {
     if (carrito) {
       return res.result(carrito);
     } else {
-      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     }
   } catch (error) {
     next(error);
@@ -114,7 +114,7 @@ export async function validUser(req, res, next) {
     if (req.user.role === "user") {
       next();
     } else {
-      throw await newError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER");
+      throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER");
     }
   } catch (error) {
     next(error);
@@ -126,11 +126,11 @@ export async function validarStockYSumar(req, res, next) {
   try {
     const cart = await cartsService.buscarCartPorID(req.params.cId);
     if (!cart) {
-      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     } else {
       const valid = await cartsService.validarStock(cart);
       if (!valid) {
-        throw await newError(ErrorType.ERROR_REQUEST, "NOT ENOUGHT STOCK");
+        throw new NewError(ErrorType.ERROR_REQUEST, "NOT ENOUGHT STOCK");
       }
       req["cart"] = cart;
       next();

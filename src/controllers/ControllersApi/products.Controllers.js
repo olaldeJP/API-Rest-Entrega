@@ -1,6 +1,6 @@
 import {
   ErrorType,
-  newError,
+  NewError,
 } from "../../middlewares/errorsManagers.Middlewares.js";
 import { productsMongoose } from "../../services/index.js";
 // import { changeNameAndId } from "../../middlewares/multer.Middlewares.js";
@@ -25,9 +25,6 @@ export async function getProductsPaginate(req, res, next) {
 export async function getProductsByIdController(req, res, next) {
   try {
     const product = await productService.buscarPorID(req.params.pid);
-    if (!product) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
-    }
     return res.result(product);
   } catch (error) {
     next(error);
@@ -69,7 +66,7 @@ export async function updateProduct(req, res, next) {
       req.body
     );
     if (!productUpdate) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
     } else {
       return res.result(productUpdate);
     }
@@ -97,7 +94,7 @@ export async function validAdmin(req, res, next) {
     if (req.user.role === "admin") {
       next();
     } else {
-      throw await newError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER ");
+      throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER ");
     }
   } catch (error) {
     next(error);

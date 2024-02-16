@@ -1,7 +1,7 @@
 import { userDaoMongoose } from "../dao/models/db/usersMongoose.js";
 import {
   ErrorType,
-  newError,
+  NewError,
 } from "../middlewares/errorsManagers.Middlewares.js";
 import { hashear } from "./crypt.js";
 class UsersService {
@@ -39,7 +39,7 @@ class UsersService {
   async buscarCartPorIdEnArreglo(_idCart, userEmail) {
     const user = await userDaoMongoose.findCart(_idCart, userEmail);
     if (!user) {
-      throw await newError(ErrorType.FORBIDDEN_USER, "THIS CART IS NOT YOURS");
+      throw new NewError(ErrorType.FORBIDDEN_USER, "THIS CART IS NOT YOURS");
     }
     return user;
   }

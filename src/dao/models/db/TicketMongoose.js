@@ -20,7 +20,7 @@ export const ticketModel = mongoose.model("tickets", TicketManager);
 class TicketDaoMongoose {
   async create(data) {
     const newTicket = await ticketModel.create(data);
-    return await newTicket.toObject();
+    return new NewTicket.toObject();
   }
   async readOne(query) {}
   async readMany(query, data) {}

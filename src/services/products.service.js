@@ -1,7 +1,7 @@
 import { productsDaoMongoose } from "../dao/models/db/ProductsMongoose.js";
 import {
   ErrorType,
-  newError,
+  NewError,
 } from "../middlewares/errorsManagers.Middlewares.js";
 import { productsMongoose } from "./index.js";
 
@@ -9,7 +9,7 @@ class ProductService {
   async buscarPorID(_id) {
     const product = await productsDaoMongoose.readOne(_id);
     if (!product) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
     }
     return product;
   }
@@ -67,14 +67,14 @@ class ProductService {
   async actualizarProducto(id, product) {
     const productoUpdate = await productsDaoMongoose.updateOne(id, product);
     if (!productoUpdate) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
     }
     return productoUpdate;
   }
   async borrarProductoPorID(_id) {
     const productoBorrado = await productsDaoMongoose.deleteOne(_id);
     if (!productoBorrado) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
     }
     return productoBorrado;
   }

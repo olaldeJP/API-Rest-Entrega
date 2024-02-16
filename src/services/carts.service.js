@@ -1,6 +1,6 @@
 import { cartsDaoMongoose } from "../dao/models/db/CartsMongoose.js";
 import {
-  newError,
+  NewError,
   ErrorType,
 } from "../middlewares/errorsManagers.Middlewares.js";
 import { productService } from "./products.service.js";
@@ -8,7 +8,7 @@ class CartsService {
   async buscarCartPorID(_id) {
     const carts = await cartsDaoMongoose.readOne(_id);
     if (!carts) {
-      throw await newError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
+      throw new NewError(ErrorType.NOT_FOUND, "ID CART NOT FOUND");
     }
     return carts;
   }
@@ -19,21 +19,21 @@ class CartsService {
   async crearNuevocart(newcarts) {
     const cartCreado = await cartsDaoMongoose.create(newcarts);
     if (!cartCreado) {
-      throw await newError(ErrorType.ERROR_REQUEST, "CREATE CART ERROR");
+      throw new NewError(ErrorType.ERROR_REQUEST, "CREATE CART ERROR");
     }
     return cartCreado;
   }
   async actualizarcarts(id, carts) {
     const cartsoUpdate = await cartsDaoMongoose.updateOne(id, carts);
     if (!cartsoUpdate) {
-      throw await newError(ErrorType.ERROR_REQUEST, "UPDATE CART ERROR");
+      throw new NewError(ErrorType.ERROR_REQUEST, "UPDATE CART ERROR");
     }
     return cartsoUpdate;
   }
   async borrarcartsPorID(_id) {
     const cartsoBorrado = await cartsDaoMongoose.deleteMany(_id);
     if (!cartsoBorrado) {
-      throw await newError(ErrorType.NOT_FOUND, "ID CART ERROR");
+      throw new NewError(ErrorType.NOT_FOUND, "ID CART ERROR");
     }
     return cartsoBorrado;
   }
@@ -45,11 +45,11 @@ class CartsService {
         buscarProduct._id
       );
       if (!buscarProduct) {
-        throw await newError(ErrorType.NOT_FOUND, "CARTS NOT FOUND");
+        throw new NewError(ErrorType.NOT_FOUND, "CARTS NOT FOUND");
       }
       return productoSumado;
     }
-    throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+    throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
   }
 
   async borrarProductoAlCart(_idC, _idP) {
