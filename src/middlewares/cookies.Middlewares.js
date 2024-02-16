@@ -10,7 +10,7 @@ export async function extraerUserCookie(req, res, next) {
   try {
     const token = req.headers.authorization.slice(7);
     const token2 = req.body.token;
-    const tokenDesencript = await desencriptar(token);
+    const tokenDesencript = await desencriptar(token2);
     req.user = tokenDesencript;
     next();
   } catch (error) {

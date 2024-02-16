@@ -83,9 +83,7 @@ export async function deleteProductMongoose(req, res, next) {
     const productoEliminado = await productService.borrarProductoPorID(
       req.params.pId
     );
-    if (!productoEliminado) {
-      throw await newError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
-    }
+
     return res.result(productoEliminado);
   } catch (error) {
     next(error);
