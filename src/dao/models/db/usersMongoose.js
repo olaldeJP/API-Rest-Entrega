@@ -30,9 +30,13 @@ class UsersDaoMonoose {
     return await this.devolverSinPassword(newUser);
   }
   async readOne(query) {
-    const user = await usersMongoose.findOne({ email: query.email }).lean();
-    if (hasheadasSonIguales(query.password, user.password)) {
-      return await this.devolverSinPassword(user);
+    try {
+      const user = await usersMongoose.findOne({ email: query.email }).lean();
+      if (await hasheadasSonIguales(query.password, user.password)) {
+        return await this.devolverSinPassword(user);
+      }
+    } catch (error) {
+      return null;
     }
   }
   async readMany(query) {

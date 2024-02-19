@@ -8,7 +8,6 @@ export async function guardarUserToken(req, res, next) {
 
 export async function extraerUserCookie(req, res, next) {
   try {
-    console.log(req.headers.authorization);
     const token = req.headers.authorization.split(" ");
     const tokenDesencript = await desencriptar(token[1]);
     req.user = tokenDesencript;

@@ -42,7 +42,7 @@ export async function postAgregarProductController(req, res, next) {
 export async function checkAdmin(req, res, next) {
   try {
     if (!(req.user.role === "admin")) {
-      throw new Error("Not Authorizathion");
+      throw new NewError(ErrorType.UNAUTHORIZED_USER, "YOU ARE NOT ADMIN");
     }
     next();
   } catch (error) {
@@ -65,11 +65,7 @@ export async function updateProduct(req, res, next) {
       _id,
       req.body
     );
-    if (!productUpdate) {
-      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
-    } else {
-      return res.result(productUpdate);
-    }
+    return res.result(productUpdate);
   } catch (error) {
     next(error);
   }
@@ -80,7 +76,6 @@ export async function deleteProductMongoose(req, res, next) {
     const productoEliminado = await productService.borrarProductoPorID(
       req.params.pId
     );
-
     return res.result(productoEliminado);
   } catch (error) {
     next(error);

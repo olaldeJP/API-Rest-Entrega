@@ -1,12 +1,11 @@
 import express from "express";
 import { apiRouter } from "./routers//api/api.Routers.js";
-import { Server } from "socket.io";
-
 import { PORT, URL_MONGO } from "./config/config.js";
 import { sessionConf } from "./config/session.conf.js";
 import { mongoConf } from "./config/mongodb.conf.js";
 import { initializePassport } from "./config/passport.conf.js";
 import { handlebarsConf } from "./config/handlebars.conf.js";
+
 const app = express();
 
 app.use(express.json());
@@ -26,4 +25,5 @@ const server = app.listen(PORT, () => {
 });
 
 //Se agregan las apis a las rutas
+
 app.use("/api", apiRouter);

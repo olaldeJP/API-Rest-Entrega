@@ -15,6 +15,9 @@ class ProductService {
   }
   async mostrarVariosProductos() {
     const array = await productsDaoMongoose.readMany();
+    if (!array) {
+      throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+    }
     return array;
   }
 

@@ -1,3 +1,4 @@
+import { logger } from "../utils/winston.js";
 export const ErrorType = {
   NOT_FOUND: 404,
   INVALID_DATA: 400,
@@ -14,5 +15,12 @@ export class NewError {
 }
 
 export async function manejadorDeErrores(error, req, res, next) {
+  if (!error.code) {
+    error.code = 400;
+  }
+  logger.ERROR(
+    `${req.method}   ${error.code} - ${error.message} /
+  | Date: ${new Date().toLocaleTimeString()} - ${new Date().toLocaleDateString()} `
+  );
   res.status(error.code).json({ status: "ERROR", message: error.message });
 }

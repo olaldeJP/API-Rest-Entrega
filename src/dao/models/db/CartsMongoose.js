@@ -30,8 +30,12 @@ export const cartsManagerMongoose = model("carts", CartSchema);
 
 class CartsDaoMonoose {
   async create(data) {
-    const newCart = await cartsMongoose.create({});
-    return newCart;
+    try {
+      const newCart = await cartsMongoose.create({});
+      return newCart;
+    } catch (error) {
+      throw new NewError(ErrorType.INVALID_DATA, error.message);
+    }
   }
   async readOne(query) {
     const cart = await cartsMongoose.findById(query).lean();

@@ -11,6 +11,9 @@ class UsersService {
   }
   async buscarUser(query) {
     const user = await userDaoMongoose.readOne(query);
+    if (!user) {
+      throw new NewError(ErrorType.NOT_FOUND, "USER NOT FOUND");
+    }
     return user;
   }
   async actualizarPasswordUser(query) {

@@ -1,8 +1,8 @@
 import { productsMongoose, cartsMongoose } from "../../services/index.js";
 import { cartsService } from "../../services/carts.service.js";
-import { productService } from "../../services/products.service.js";
 import { ticketService } from "../../services/ticket.service.js";
 import { usersService } from "../../services/users.service.js";
+import { logger } from "../../utils/winston.js";
 import {
   ErrorType,
   NewError,
@@ -13,6 +13,7 @@ export async function createNewCart(req, res, next) {
   try {
     const cartN = await cartsService.crearNuevocart({});
     await usersService.agregarCarrito(req.user.email, cartN._id);
+
     res.created(cartN);
   } catch (error) {
     next(error);
@@ -27,7 +28,7 @@ export async function agregarProductosArregloCartsByCId(req, res, next) {
     const cart = await cartsService.agregarProductoAlCart(cId, pId);
     res.created(cart);
   } catch (error) {
-    new Next(error);
+    next(error);
   }
 }
 

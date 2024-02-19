@@ -10,6 +10,7 @@ import {
   extraerUserCookie,
   guardarUserToken,
 } from "../../middlewares/cookies.Middlewares.js";
+import { logger } from "../../utils/winston.js";
 export const sessionsRouter = new Router();
 
 sessionsRouter.use((req, res, next) => {
@@ -23,11 +24,12 @@ sessionsRouter.post(
   }),
   guardarUserToken,
   async (req, res) => {
+    logger.INFO(
+      ` Login: ${
+        req.user.email
+      } - | ${new Date().toLocaleTimeString()} -  ${new Date().toLocaleDateString()}`
+    );
     res.result(req.token);
-  },
-
-  (error, req, res, next) => {
-    res.status(401).json({ status: "error", message: error.message });
   }
 );
 sessionsRouter.get("/current", extraerUserCookie, sesionActual);

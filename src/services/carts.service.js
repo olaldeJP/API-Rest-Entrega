@@ -13,8 +13,15 @@ class CartsService {
     return carts;
   }
   async mostrarVarioscarts() {
-    const array = await cartsDaoMongoose.readMany();
-    return array;
+    try {
+      const array = await cartsDaoMongoose.readMany();
+      return array;
+    } catch {
+      error;
+    }
+    {
+      throw new NewError(ErrorType.ERROR_REQUEST, error.message);
+    }
   }
   async crearNuevocart(newcarts) {
     const cartCreado = await cartsDaoMongoose.create(newcarts);
@@ -31,8 +38,8 @@ class CartsService {
     return cartsoUpdate;
   }
   async borrarcartsPorID(_id) {
-    const cartsoBorrado = await cartsDaoMongoose.deleteMany(_id);
-    if (!cartsoBorrado) {
+    const cartsBorrado = await cartsDaoMongoose.deleteMany(_id);
+    if (!cartsBorrado) {
       throw new NewError(ErrorType.NOT_FOUND, "ID CART ERROR");
     }
     return cartsoBorrado;

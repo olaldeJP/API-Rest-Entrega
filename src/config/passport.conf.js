@@ -8,6 +8,10 @@ import {
   GITHUB_URL_CALLBACK,
   GITHUB_CLIENT_ID,
 } from "./config.js";
+import {
+  ErrorType,
+  NewError,
+} from "../middlewares/errorsManagers.Middlewares.js";
 
 export const initializePassport = (app) => {
   passport.use(
@@ -25,7 +29,9 @@ export const initializePassport = (app) => {
           });
           done(null, userLogin);
         } catch (error) {
-          done(error);
+          done(
+            new NewError(ErrorType.INVALID_DATA, "USER OR PASSWORD INVALID")
+          );
         }
       }
     )

@@ -2,6 +2,10 @@ import mongoose, { Schema, model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { productsMongoose } from "../../../services/index.js";
+import {
+  ErrorType,
+  NewError,
+} from "../../../middlewares/errorsManagers.Middlewares.js";
 
 const productoSchema = new Schema(
   {
@@ -31,8 +35,12 @@ export const productsManagerMongoose = model("products", productoSchema);
 
 class ProductsDaoMonoose {
   async create(data) {
-    const newProducto = await productsMongoose.create(data);
-    return newProducto.toObject();
+    try {
+      const newProducto = await productsMongoose.create(data);
+      return newProducto.toObject();
+    } catch (error) {
+      throw new NewError(ErrorType.INVALID_DATA, error.message);
+    }
   }
 
   async readOne(query) {
