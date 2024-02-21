@@ -30,7 +30,7 @@ export const logger = winston.createLogger({
       ),
     }),
     new winston.transports.File({
-      filename: "./dataBase/logs/error.log",
+      filename: "./Errors/errors.log",
       level: "ERROR",
     }),
   ],
