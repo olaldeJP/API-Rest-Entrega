@@ -10,17 +10,17 @@ class UsersService {
     return user;
   }
   async buscarUser(query) {
-    const user = await userDaoMongoose.readOne(query);
+    const user = await userDaoMongoose.existeUser(query);
     if (!user) {
-      throw new NewError(ErrorType.NOT_FOUND, "USER NOT FOUND");
+      throw new NewError(ErrorType.UNAUTHORIZED_USER, "USER NOT FOUND");
     }
     return user;
   }
-  async actualizarPasswordUser(query) {
-    query.password = hashear(query.password);
+  async actualizarPasswordUser(email, password) {
+    const passwordH = hashear(password);
     const user = await userDaoMongoose.updateOnePassword({
-      email: query.email,
-      password: query.password,
+      email: email,
+      password: passwordH,
     });
     return user;
   }
@@ -44,6 +44,10 @@ class UsersService {
     if (!user) {
       throw new NewError(ErrorType.FORBIDDEN_USER, "THIS CART IS NOT YOURS");
     }
+    return user;
+  }
+  async cambiarRolUsuario(id) {
+    const user = await userDaoMongoose.changeRol(id);
     return user;
   }
 }

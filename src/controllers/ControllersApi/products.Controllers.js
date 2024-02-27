@@ -51,6 +51,7 @@ export async function checkAdmin(req, res, next) {
 }
 export async function addNewProduct(req, res, next) {
   try {
+    req.body["owner"] = req.user.email;
     const nuevoProduct = await productService.crearProducto(req.body);
     return res.created(nuevoProduct);
   } catch (error) {
@@ -84,12 +85,20 @@ export async function deleteProductMongoose(req, res, next) {
 
 export async function agregarImg(req, res, next) {}
 
-export async function validAdmin(req, res, next) {
+export async function validarProducto(req, res, next) {
   try {
-    if (req.user.role === "admin") {
+    if (req.isAdmin) {
       next();
     } else {
-      throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER ");
+      const product = await productService.buscarPorID(req.params.pId);
+      if (product.owner === req.user.email) {
+        next();
+      }
+
+      throw new NewError(
+        ErrorType.UNAUTHORIZED_USER,
+        "YOU CAN NOT DELEATE THIS PRODUCT"
+      );
     }
   } catch (error) {
     next(error);

@@ -1,5 +1,10 @@
 import { usersService } from "../../services/users.service.js";
 import { emailService } from "../../services/email.service.js";
+import { validAdmin } from "../../middlewares/authorizathion.middleware.js";
+import {
+  ErrorType,
+  NewError,
+} from "../../middlewares/errorsManagers.Middlewares.js";
 
 export async function sesionActual(req, res) {
   try {
@@ -28,4 +33,28 @@ export async function envioMail(req, res, next) {
     ` Te Damos La Bienvenida ${req.user.first_name} AL ECOMERS`
   );
   next();
+}
+export async function cambiarRolUser(req, res, next) {
+  try {
+    const user = await usersService.cambiarRolUsuario(req.params.idUser);
+    res.result(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function checkAdmin(req, res, next) {
+  try {
+    req["isAdmin"] = await validAdmin(req);
+    if (req.isAdmin) {
+      next();
+    } else {
+      throw new NewError(
+        ErrorType.FORBIDDEN_USER,
+        "JUST ADMIN CAN CHANGE ROLES"
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
 }

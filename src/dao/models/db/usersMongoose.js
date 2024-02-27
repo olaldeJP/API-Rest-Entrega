@@ -2,6 +2,11 @@ import mongoose, { Schema, model } from "mongoose";
 import { randomUUID } from "node:crypto";
 import { hasheadasSonIguales, hashear } from "../../../services/crypt.js";
 import { usersMongoose } from "../../../services/index.js";
+import {
+  ErrorType,
+  NewError,
+} from "../../../middlewares/errorsManagers.Middlewares.js";
+import { urlencoded } from "express";
 
 const UsersManager = new Schema(
   {
@@ -11,8 +16,8 @@ const UsersManager = new Schema(
     last_name: { type: String },
     age: { type: Number },
     password: { type: String, required: true, default: "(NO ES NECESARIO)" },
-    carts: { type: [], ref: "carts._id" },
-    role: { type: String, enum: ["admin", "user"], default: "user" },
+    carts: { type: [], ref: "carts._id", default: [] },
+    role: { type: String, enum: ["admin", "user", "premium"], default: "user" },
   },
   {
     strict: "throw",
@@ -28,6 +33,13 @@ class UsersDaoMonoose {
     data.password = hashear(data.password);
     const newUser = await usersMongoose.create(data);
     return await this.devolverSinPassword(newUser);
+  }
+  async existeUser(query) {
+    const user = await usersMongoose.findOne({ email: query.email }).lean();
+    if (user) {
+      return await this.devolverSinPassword(user);
+    }
+    return null;
   }
   async readOne(query) {
     try {
@@ -54,11 +66,13 @@ class UsersDaoMonoose {
     return array;
   }
   async updateOnePassword(query) {
-    const updateUser = await usersMongoose.updateOne(
-      { email: query.email },
-      { $set: { password: query.password } },
-      { new: true }
-    );
+    const updateUser = await usersMongoose
+      .updateOne(
+        { email: query.email },
+        { $set: { password: query.password } },
+        { new: true }
+      )
+      .lean();
     return updateUser;
   }
   async updateMany(query, data) {
@@ -75,6 +89,31 @@ class UsersDaoMonoose {
       .findOne({ email: userEmail, carts: { _id: _idCart } })
       .lean();
     return array;
+  }
+  async changeRol(id) {
+    const user = await usersMongoose.findOne({ _id: id });
+    if (user) {
+      if (user.role === "user") {
+        await usersMongoose
+          .findOneAndUpdate(
+            { _id: id },
+            { $set: { role: "premium" } },
+            { new: true }
+          )
+          .lean();
+      } else {
+        await usersMongoose
+          .findOneAndUpdate(
+            { _id: id },
+            { $set: { role: "user" } },
+            { new: true }
+          )
+          .lean();
+      }
+
+      return await this.devolverSinPassword(user);
+    }
+    throw new NewError(ErrorType.UNAUTHORIZED_USER, "USER NOT FOUND");
   }
   async devolverSinPassword(query) {
     const datosUsuario = {

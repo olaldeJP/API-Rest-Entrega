@@ -38,7 +38,7 @@ export const logger = winston.createLogger({
 
 export const addLogger = async (req, res, next) => {
   logger.HTTP(
-    `${
+    ` ${req.method} - ${
       req.url
     } | ${new Date().toLocaleTimeString()} -  ${new Date().toLocaleDateString()}`
   );

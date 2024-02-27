@@ -4,13 +4,16 @@ import passport from "passport";
 import { sesionActual } from "../../controllers/ControllersApi/users.Controllers.js";
 import {
   logout,
+  validarUser,
   cambiarPass,
+  linkCambiarPassword,
 } from "../../controllers/ControllersApi/sessions.Constrollers.js";
 import {
   extraerUserCookie,
   guardarUserToken,
 } from "../../middlewares/cookies.Middlewares.js";
 import { logger } from "../../utils/winston.js";
+
 export const sessionsRouter = new Router();
 
 sessionsRouter.use((req, res, next) => {
@@ -34,4 +37,5 @@ sessionsRouter.post(
 );
 sessionsRouter.get("/current", extraerUserCookie, sesionActual);
 sessionsRouter.delete("/logout", logout);
-sessionsRouter.put("/cambiarPassword", cambiarPass);
+sessionsRouter.put("/linkCambiarPassword", validarUser, linkCambiarPassword);
+sessionsRouter.get("/cambiarPassword/:user", cambiarPass);
