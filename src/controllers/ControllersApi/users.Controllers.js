@@ -37,7 +37,7 @@ export async function envioMail(req, res, next) {
 export async function cambiarRolUser(req, res, next) {
   try {
     const user = await usersService.cambiarRolUsuario(req.params.idUser);
-    res.result(user);
+    return res.result(user);
   } catch (error) {
     next(error);
   }
