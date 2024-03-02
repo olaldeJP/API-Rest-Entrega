@@ -13,6 +13,8 @@ export async function extraerUserCookie(req, res, next) {
     req.user = tokenDesencript;
     next();
   } catch (error) {
-    return res.status(400).json({ status: "error", message: error.message });
+    return res
+      .status(400)
+      .json({ status: "error", message: "You Need to login " });
   }
 }

@@ -112,7 +112,7 @@ export async function eliminarTodosLosProductosDelCarrito(req, res, next) {
 
 export async function validUser(req, res, next) {
   try {
-    if (req.user.role === "user") {
+    if (req.user.role === "user" || req.user.role === "premium") {
       next();
     } else {
       throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER");
