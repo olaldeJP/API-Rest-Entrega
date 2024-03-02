@@ -102,13 +102,15 @@ class UsersDaoMonoose {
           )
           .lean();
       } else {
-        await usersMongoose
-          .findOneAndUpdate(
-            { _id: id },
-            { $set: { role: "user" } },
-            { new: true }
-          )
-          .lean();
+        if (user.role === "premium") {
+          await usersMongoose
+            .findOneAndUpdate(
+              { _id: id },
+              { $set: { role: "user" } },
+              { new: true }
+            )
+            .lean();
+        }
       }
 
       return await this.devolverSinPassword(user);
