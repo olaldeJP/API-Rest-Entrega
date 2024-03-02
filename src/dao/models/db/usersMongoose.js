@@ -112,7 +112,6 @@ class UsersDaoMonoose {
             .lean();
         }
       }
-
       return await this.devolverSinPassword(user);
     }
     throw new NewError(ErrorType.UNAUTHORIZED_USER, "USER NOT FOUND");
