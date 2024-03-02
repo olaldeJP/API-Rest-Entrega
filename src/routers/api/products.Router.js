@@ -13,11 +13,16 @@ import { extraerUserCookie } from "../../middlewares/cookies.Middlewares.js";
 import { validAdminAndPremium } from "../../middlewares/authorizathion.middleware.js";
 
 export const productsRouter = new Router();
-productsRouter.use(extraerUserCookie, validAdminAndPremium);
+productsRouter.use(extraerUserCookie);
 productsRouter.get("/", getProductsController);
 productsRouter.get("/productsPaginate", getProductsPaginate);
 productsRouter.get("/:pid", getProductsByIdController);
 productsRouter.post("/addImg", upload.single("imagenProductos"));
-productsRouter.post("/", addNewProduct);
-productsRouter.put("/:pid", updateProduct);
-productsRouter.delete("/:pId", validarProducto, deleteProductMongoose);
+productsRouter.post("/", validAdminAndPremium, addNewProduct);
+productsRouter.put("/:pid", validAdminAndPremium, updateProduct);
+productsRouter.delete(
+  "/:pId",
+  validAdminAndPremium,
+  validarProducto,
+  deleteProductMongoose
+);
