@@ -5,6 +5,7 @@ import {
   mostrarCartByCId,
   createNewCart,
   validarCarroUser,
+  validarUsuarioNoSeaOwner,
   borrarProductoDelCarrito,
   actualizarCarrito,
   validUser,
@@ -22,6 +23,7 @@ cartsRouter.use(extraerUserCookie, validUser);
 cartsRouter.post("/", createNewCart);
 cartsRouter.post(
   "/:cId/product/:pid",
+  validarUsuarioNoSeaOwner,
   validarCarroUser,
   agregarProductosArregloCartsByCId
 );

@@ -93,12 +93,12 @@ export async function validarProducto(req, res, next) {
       const product = await productService.buscarPorID(req.params.pId);
       if (product.owner === req.user.email) {
         next();
+      } else {
+        throw new NewError(
+          ErrorType.UNAUTHORIZED_USER,
+          "YOU CAN NOT DELEATE THIS PRODUCT"
+        );
       }
-
-      throw new NewError(
-        ErrorType.UNAUTHORIZED_USER,
-        "YOU CAN NOT DELEATE THIS PRODUCT"
-      );
     }
   } catch (error) {
     next(error);

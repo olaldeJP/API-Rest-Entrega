@@ -7,6 +7,7 @@ import {
   ErrorType,
   NewError,
 } from "../../middlewares/errorsManagers.Middlewares.js";
+import { productService } from "../../services/products.service.js";
 
 //Crea un nuevo carrito vacio
 export async function createNewCart(req, res, next) {
@@ -23,10 +24,24 @@ export async function createNewCart(req, res, next) {
 // Agrega el producto (pID) al carrito, verifica si existe, si es asi lo agrega al carrito o lo suma, si no existe el id del carrito o producto lo informa
 export async function agregarProductosArregloCartsByCId(req, res, next) {
   try {
-    const cId = req.params.cId;
-    const pId = req.params.pid;
-    const cart = await cartsService.agregarProductoAlCart(cId, pId);
+    const cart = await cartsService.agregarProductoAlCart(req.cid, req.product);
     res.created(cart);
+  } catch (error) {
+    next(error);
+  }
+}
+export async function validarUsuarioNoSeaOwner(req, res, next) {
+  try {
+    req["cid"] = req.params.cId;
+    req["product"] = await productService.buscarPorID(req.params.pid);
+    if (!(req.user.email === req.product.owner)) {
+      next();
+    } else {
+      throw new NewError(
+        ErrorType.UNAUTHORIZED_USER,
+        "OWNER OF THE PRODUCT CAN NOT ADD IT IN THE CART"
+      );
+    }
   } catch (error) {
     next(error);
   }
@@ -112,7 +127,11 @@ export async function eliminarTodosLosProductosDelCarrito(req, res, next) {
 
 export async function validUser(req, res, next) {
   try {
-    if (req.user.role === "user" || req.user.role === "premium") {
+    if (
+      req.user.role === "user" ||
+      req.user.role === "premium" ||
+      req.user.role === "admin"
+    ) {
       next();
     } else {
       throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER");
@@ -157,9 +176,8 @@ export async function finalizarCompra(req, res, next) {
 
 export async function validarCarroUser(req, res, next) {
   try {
-    const _idCart = req.params.cId;
     const cart = await usersService.buscarCartPorIdEnArreglo(
-      _idCart,
+      req.cid,
       req.user.email
     );
     next();

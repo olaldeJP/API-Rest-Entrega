@@ -42,21 +42,14 @@ class CartsService {
     if (!cartsBorrado) {
       throw new NewError(ErrorType.NOT_FOUND, "ID CART ERROR");
     }
-    return cartsoBorrado;
+    return cartsBorrado;
   }
-  async agregarProductoAlCart(_idC, _idP) {
-    const buscarProduct = await productService.buscarPorID(_idP);
-    if (buscarProduct) {
-      const productoSumado = await cartsDaoMongoose.addProductCart(
-        _idC,
-        buscarProduct._id
-      );
-      if (!buscarProduct) {
-        throw new NewError(ErrorType.NOT_FOUND, "CARTS NOT FOUND");
-      }
-      return productoSumado;
-    }
-    throw new NewError(ErrorType.NOT_FOUND, "ID PRODUCT NOT FOUND");
+  async agregarProductoAlCart(_idC, product) {
+    const productoSumado = await cartsDaoMongoose.addProductCart(
+      _idC,
+      product._id
+    );
+    return productoSumado;
   }
 
   async borrarProductoAlCart(_idC, _idP) {
