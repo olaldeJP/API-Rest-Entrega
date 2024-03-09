@@ -1,0 +1,27 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del carrito
+        products:
+          type: array
+          description: Arreglo de elementos que representan productos en el carrito
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: ID del producto en el carrito
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito
+      example:
+        _id: 8ede78b-11fa-4ba0-98c5-6e58573e752b
+        products:
+          - id: ea0b7a3f-7dc9-4d73-b6da-9f02ee798196
+            quantity: 2
+          - id: 3a513a8e-a775-40a7-9716-ae49da95baw
+            quantity: 1

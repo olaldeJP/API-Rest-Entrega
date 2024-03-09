@@ -22,7 +22,7 @@ export async function validAdminAndPremium(req, res, next) {
     await validAdmin(req);
     await validPremium(req);
     if (req.isPremium || req.isAdmin) {
-      next();
+      return next();
     } else {
       throw new NewError(ErrorType.UNAUTHORIZED_USER, "UNAUTHORIZED USER ");
     }

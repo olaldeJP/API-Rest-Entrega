@@ -1,0 +1,35 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: _id del usuario.
+        first_name:
+          type: String
+          description: el primer nombre del usuario.
+        password:
+          type: String
+          description: el password del usuario.
+        last_name:
+          type: String
+          description: el segundo del usuario.
+        email:
+          type: String
+          description: el email del usuario.
+        carts:
+          type: Array
+          description: arreglo de objets con un _id de tipo String indicando los carritos del usuario.
+        role:
+          type: String
+          description: el rol del usuario.
+      example:
+        _id: fa9s8d7f9a8sd7f09a8sd7f0a890d0af5
+        username: 'Juan'
+        password: '123'
+        first_name: 'Juan'
+        last_name: 'pablo'
+        email: 'marian@profe.com'
+        cart: [ _id: 'fa9s8d7f9a8sd7f09a8sd7f0a890d0af5', _id: 'fa9s8d7f9a8sd7f09a8sd7f0a890d5355']
+        rol: 'user'

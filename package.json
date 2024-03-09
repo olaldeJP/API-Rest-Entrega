@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "load:sencilla": "artillery quick 'http://localhost:8080/api/mockingproducts' ",
-    "dev": "nodemon -e js ."
+    "dev": "nodemon -e js ,yaml * ."
   },
   "keywords": [],
   "author": "",
@@ -37,13 +37,17 @@
     "session": "^0.1.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.7.4",
+    "swagger-jsdoc": "^6.2.8",
     "twilio": "^4.21.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "artillery": "^2.0.6",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "swagger-ui-express": "^5.0.0"
   }
 }

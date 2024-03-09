@@ -1,0 +1,35 @@
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: String
+          descrption: _id del producto
+        code:
+          type: String
+          descrption: codigo unico del producto
+        price:
+          type: Number
+          description: precio del producto
+        owner:
+          type: String
+          description: el email del usuario creador del producto
+        stock:
+          type: Number
+          description: cantidad de stock del producto
+        thumbnail:
+          type: String
+          description: string de la imagen del producto
+        title:
+          type: String
+          description: titulo del producto
+      example:
+        _id: '3a513a8e-a775-40a7-9716-ae49da95bapo'
+        code: 641621  
+        description: 'Producto para vender'
+        price: 65
+        owner: 'juan@mail.com'
+        stock: 25
+        thumbnail: 'unaimagen'
+        title: 'Titulo Del Producto'

@@ -5,7 +5,8 @@ import { sessionConf } from "./config/session.conf.js";
 import { mongoConf } from "./config/mongodb.conf.js";
 import { initializePassport } from "./config/passport.conf.js";
 import { handlebarsConf } from "./config/handlebars.conf.js";
-
+import swaggerUiExpress from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 const app = express();
 
 app.use(express.json());
@@ -25,5 +26,21 @@ const server = app.listen(PORT, () => {
 });
 
 //Se agregan las apis a las rutas
+
+const SWAGGER_CONFIG = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      version: "1",
+      title: "Swagger ",
+      description: "Swagger For Ecommers",
+    },
+  },
+  apis: ["./docs/**/*.yaml"],
+};
+
+const spec = swaggerJSDoc(SWAGGER_CONFIG);
+
+app.use("/api-doc", swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
 
 app.use("/api", apiRouter);
