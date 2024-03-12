@@ -1,6 +1,6 @@
 import { usersService } from "../../services/users.service.js";
 import { emailService } from "../../services/email.service.js";
-import { validAdmin } from "../../middlewares/authorizathion.middleware.js";
+import { validAdmin } from "../../middlewares/authorizathion.Middleware.js";
 import {
   ErrorType,
   NewError,

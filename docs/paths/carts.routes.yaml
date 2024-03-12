@@ -1,22 +1,21 @@
 paths:
-  /carts:
+  /api/carts:
     post:
       summary: Crear un nuevo carrito
       tags:
         - Carts
       responses:
-        "201":
+        '201':
           description: Carrito creado con éxito
-
     get:
       summary: Obtener todos los carritos
       tags:
         - Carts
       responses:
-        "200":
+        '200':
           description: Éxito
 
-  /carts/{cId}/product/{pid}:
+  '/api/carts/{cId}/product/{pid}':
     post:
       summary: Agregar un producto a un carrito
       tags:
@@ -35,9 +34,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Producto agregado con éxito
-
     delete:
       summary: Eliminar un producto de un carrito
       tags:
@@ -56,10 +54,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Producto eliminado con éxito
 
-  /carts/{cId}:
+  '/api/carts/{cId}':
     get:
       summary: Obtener un carrito por ID
       tags:
@@ -72,9 +70,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Éxito
-
     put:
       summary: Actualizar un carrito por ID
       tags:
@@ -87,9 +84,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Carrito actualizado con éxito
-
     delete:
       summary: Eliminar un carrito por ID
       tags:
@@ -102,10 +98,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Carrito eliminado con éxito
 
-  /carts/{cId}/products/{pid}:
+  '/api/carts/{cId}/products/{pid}':
     delete:
       summary: Eliminar todos los productos de un carrito
       tags:
@@ -124,10 +120,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Todos los productos eliminados con éxito
 
-  /carts/{cId}/purchase:
+  '/api/carts/{cId}/purchase':
     post:
       summary: Realizar una compra con un carrito
       tags:
@@ -140,5 +136,5 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Compra realizada con éxito

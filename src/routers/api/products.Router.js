@@ -10,7 +10,7 @@ import {
   validarProducto,
 } from "../../controllers/ControllersApi/products.Controllers.js";
 import { extraerUserCookie } from "../../middlewares/cookies.Middlewares.js";
-import { validAdminAndPremium } from "../../middlewares/authorizathion.middleware.js";
+import { validAdminAndPremium } from "../../middlewares/authorizathion.Middleware.js";
 
 export const productsRouter = new Router();
 productsRouter.use(extraerUserCookie);
