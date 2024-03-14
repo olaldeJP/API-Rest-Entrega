@@ -1,6 +1,5 @@
 import multer from "multer";
 import fs from "fs";
-import { send } from "process";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

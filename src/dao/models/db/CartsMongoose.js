@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-import { cartsMongoose } from "../../../services/index.js";
+import { cartsMongoose } from "../../../utils/index.js";
 import { v4 as uuidv4 } from "uuid";
 import mongoosePaginate from "mongoose-paginate-v2";
 import {

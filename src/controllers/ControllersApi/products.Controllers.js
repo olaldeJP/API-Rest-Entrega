@@ -2,7 +2,7 @@ import {
   ErrorType,
   NewError,
 } from "../../middlewares/errorsManagers.Middlewares.js";
-import { productsMongoose } from "../../services/index.js";
+import { productsMongoose } from "../../utils/index.js";
 // import { changeNameAndId } from "../../middlewares/multer.Middlewares.js";
 import { productService } from "../../services/products.service.js";
 export async function getProductsController(req, res, next) {

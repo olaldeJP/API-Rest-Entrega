@@ -3,9 +3,10 @@
   "name": "proyeprimeraentrega",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/app.js",
+  "main": "./src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive",
+    "test:watch": "nodemon --exec mocha",
     "start": "node .",
     "load:sencilla": "artillery quick 'http://localhost:8080/api/mockingproducts' ",
     "dev": "nodemon -e js ,yaml * ."
@@ -44,12 +45,15 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@types/mocha": "^10.0.6",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "artillery": "^2.0.6",
     "chai": "^5.1.0",
     "mocha": "github:types/mocha",
     "nodemon": "^3.0.3",
+    "supertest": "^6.3.4",
     "swagger-ui-express": "^5.0.0"
   }
 }

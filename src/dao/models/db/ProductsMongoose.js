@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import mongoosePaginate from "mongoose-paginate-v2";
-import { productsMongoose } from "../../../services/index.js";
+import { productsMongoose } from "../../../utils/index.js";
 import {
   ErrorType,
   NewError,

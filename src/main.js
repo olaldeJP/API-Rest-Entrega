@@ -1,3 +1,4 @@
+/*
 import express from "express";
 import { apiRouter } from "./routers//api/api.Routers.js";
 import { PORT, URL_MONGO } from "./config/config.js";
@@ -35,12 +36,20 @@ const SWAGGER_CONFIG = {
       title: "Swagger ",
       description: "Swagger For Ecommers",
     },
-  },
-  apis: ["./docs/**/*.yaml"],
-};
+  },*/
 
+//  apis: ["./docs/**/*.yaml"],
+//};
+/*
 const spec = swaggerJSDoc(SWAGGER_CONFIG);
 
 app.use("/api-doc", swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
 
 app.use("/api", apiRouter);
+*/
+
+import { Server } from "../app/app.js";
+import { PORT } from "./config/config.js";
+import { URL_MONGO_ATLAS } from "./config/config.js";
+const server = new Server(URL_MONGO_ATLAS);
+server.connect(PORT);

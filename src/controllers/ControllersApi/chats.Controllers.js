@@ -1,4 +1,4 @@
-import { messageMongoose } from "../../services/index.js";
+import { messageMongoose } from "../../utils/index.js";
 
 export async function saveAndSend(req, res) {
   try {

@@ -3,8 +3,9 @@ import {
   ErrorType,
   NewError,
 } from "../middlewares/errorsManagers.Middlewares.js";
-import { hashear } from "./crypt.js";
-class UsersService {
+import { hashear } from "../utils/crypt.js";
+export class UsersService {
+  constructor() {}
   async register(newUser) {
     const user = await userDaoMongoose.create(newUser);
     return user;
@@ -17,7 +18,7 @@ class UsersService {
     return user;
   }
   async actualizarPasswordUser(email, password) {
-    const passwordH = hashear(password);
+    const passwordH = await hashear(password);
     const user = await userDaoMongoose.updateOnePassword({
       email: email,
       password: passwordH,

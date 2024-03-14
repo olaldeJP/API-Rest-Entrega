@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import { randomUUID } from "node:crypto";
-import { hasheadasSonIguales, hashear } from "../../../services/crypt.js";
-import { usersMongoose } from "../../../services/index.js";
+import { hasheadasSonIguales, hashear } from "../../../utils/crypt.js";
+import { usersMongoose } from "../../../utils/index.js";
 import {
   ErrorType,
   NewError,
@@ -30,7 +30,7 @@ export const usersModel = mongoose.model("users", UsersManager);
 
 class UsersDaoMonoose {
   async create(data) {
-    data.password = hashear(data.password);
+    data.password = await hashear(data.password);
     const newUser = await usersMongoose.create(data);
     return await this.devolverSinPassword(newUser);
   }

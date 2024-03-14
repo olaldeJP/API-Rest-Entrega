@@ -3,7 +3,7 @@ import {
   ErrorType,
   NewError,
 } from "../middlewares/errorsManagers.Middlewares.js";
-import { productsMongoose } from "./index.js";
+import { productsMongoose } from "../utils/index.js";
 
 class ProductService {
   async buscarPorID(_id) {

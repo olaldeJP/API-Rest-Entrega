@@ -1,4 +1,4 @@
-import { productsMongoose, cartsMongoose } from "../../services/index.js";
+import { productsMongoose, cartsMongoose } from "../../utils/index.js";
 import { cartsService } from "../../services/carts.service.js";
 import { ticketService } from "../../services/ticket.service.js";
 import { usersService } from "../../services/users.service.js";
