@@ -2,6 +2,7 @@ import { usersService } from "../../services/users.service.js";
 import { COOKIE_OPTS } from "../../config/config.js";
 import { emailService } from "../../services/email.service.js";
 import { desencriptar, encriptarUnaHora } from "../../utils/criptorafia.js";
+
 //Se guarda en la base de datos el usuario enviado desde register.handlebars
 
 export async function cambiarPass(req, res) {
@@ -35,4 +36,8 @@ export async function linkCambiarPassword(req, res, next) {
     await encriptarUnaHora(req.user)
   );
   res.accepted();
+}
+export async function updateLoginDate(req, res, next) {
+  await usersService.actualizarHorarioLogin(req.user.email);
+  next();
 }

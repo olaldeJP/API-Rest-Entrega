@@ -7,6 +7,7 @@ import {
   validarUser,
   cambiarPass,
   linkCambiarPassword,
+  updateLoginDate,
 } from "../../controllers/ControllersApi/sessions.Constrollers.js";
 import {
   extraerUserCookie,
@@ -26,6 +27,7 @@ sessionsRouter.post(
     failWithError: true,
   }),
   guardarUserToken,
+  updateLoginDate,
   async (req, res) => {
     logger.INFO(
       ` Login: ${
@@ -36,6 +38,6 @@ sessionsRouter.post(
   }
 );
 sessionsRouter.get("/current", extraerUserCookie, sesionActual);
-sessionsRouter.delete("/logout", logout);
+sessionsRouter.delete("/logout", updateLoginDate, logout);
 sessionsRouter.put("/linkCambiarPassword", validarUser, linkCambiarPassword);
 sessionsRouter.get("/cambiarPassword/:user", cambiarPass);

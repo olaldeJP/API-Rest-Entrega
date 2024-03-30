@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-export const PORT = process.env.PORT;
+export const PORT = process.env.PORT || 8080;
 export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 export const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 export const GITHUB_URL_CALLBACK = process.env.GITHUB_URL_CALLBACK;

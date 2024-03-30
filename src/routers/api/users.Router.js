@@ -7,6 +7,7 @@ import {
 } from "../../controllers/ControllersApi/users.Controllers.js";
 import { logger } from "../../utils/winston.js";
 import { extraerUserCookie } from "../../middlewares/cookies.Middlewares.js";
+import { updateLoginDate } from "../../controllers/ControllersApi/sessions.Constrollers.js";
 export const userRouter = new Router();
 userRouter.post(
   "/",
@@ -20,6 +21,7 @@ userRouter.post(
     );
     next();
   },
+  updateLoginDate,
   async (req, res) => {
     res.created(req.user);
   }

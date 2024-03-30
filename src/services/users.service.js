@@ -25,6 +25,13 @@ export class UsersService {
     });
     return user;
   }
+  async actualizarHorarioLogin(email) {
+    const updateDate = await userDaoMongoose.updateDate(email);
+    if (!updateDate) {
+      throw new NewError(ErrorType.FORBIDDEN_USER, "Error update Date");
+    }
+    return updateDate;
+  }
   async buscarMuchosUsers(query) {
     const user = await userDaoMongoose.readMany(query);
     return user;
