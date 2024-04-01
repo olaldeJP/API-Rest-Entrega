@@ -41,3 +41,11 @@ export async function updateLoginDate(req, res, next) {
   await usersService.actualizarHorarioLogin(req.user.email);
   next();
 }
+export async function validarUserbyId(req, res, next) {
+  try {
+    req["user"] = await usersService.findUserById(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+}

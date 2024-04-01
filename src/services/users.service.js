@@ -17,6 +17,13 @@ export class UsersService {
     }
     return user;
   }
+  async findUserById(query) {
+    const user = await userDaoMongoose.findUserId(query);
+    if (!user) {
+      throw new NewError(ErrorType.UNAUTHORIZED_USER, "USER NOT FOUND");
+    }
+    return user;
+  }
   async actualizarPasswordUser(email, password) {
     const passwordH = await hashear(password);
     const user = await userDaoMongoose.updateOnePassword({
@@ -58,6 +65,47 @@ export class UsersService {
     const user = await userDaoMongoose.changeRol(id);
     return user;
   }
-}
+  async checkDocumentsArray(file, documents) {
+    for (let index = 0; index < documents.length; index++) {
+      const document = documents[index];
+      if (document.name === file.originalname) {
+        return true;
+      }
+    }
+    return false;
+  }
 
+  async actualizarArregloDocuments(user) {
+    const userUpdate = await userDaoMongoose.updateDocuments(
+      user.email,
+      user.documents
+    );
+    return userUpdate;
+  }
+
+  async validoParaPremium(uid) {
+    const user = await this.findUserById(uid);
+    let identification = false;
+    let adress = false;
+    let state = false;
+
+    for (let index = 0; index < user.documents.length; index++) {
+      const element = user.documents[index];
+      if (element.name === "identification.pdf") {
+        identification = true;
+      }
+      if (element.name === "adress.pdf") {
+        adress = true;
+      }
+      if (element.name === "state.pdf") {
+        state = true;
+      }
+    }
+    if (identification && adress && state) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
 export const usersService = new UsersService();

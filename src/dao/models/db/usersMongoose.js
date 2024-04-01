@@ -17,7 +17,7 @@ const UsersManager = new Schema(
     age: { type: Number },
     password: { type: String, required: true, default: "(NO ES NECESARIO)" },
     carts: { type: [], ref: "carts._id", default: [] },
-    documents: { type: [Object], default: [{ name: "", reference: "" }] },
+    documents: { type: [Object] },
     last_connection: { type: Date },
     role: { type: String, enum: ["admin", "user", "premium"], default: "user" },
   },
@@ -43,6 +43,14 @@ class UsersDaoMonoose {
     }
     return null;
   }
+  async findUserId(query) {
+    const user = await usersMongoose.findById(query).lean();
+    if (user) {
+      return await this.devolverSinPassword(user);
+    }
+    return null;
+  }
+
   async readOne(query) {
     try {
       const user = await usersMongoose.findOne({ email: query.email }).lean();
@@ -129,6 +137,16 @@ class UsersDaoMonoose {
     }
     throw new NewError(ErrorType.UNAUTHORIZED_USER, "USER NOT FOUND");
   }
+  async updateDocuments(emailUser, documentsUser) {
+    const updateUser = await usersMongoose
+      .updateOne(
+        { email: emailUser },
+        { $set: { documents: documentsUser } },
+        { new: true }
+      )
+      .lean();
+    return await this.devolverSinPassword(updateUser);
+  }
 
   async devolverSinPassword(query) {
     const datosUsuario = {
@@ -139,6 +157,7 @@ class UsersDaoMonoose {
       age: query["age"],
       carts: query["carts"],
       role: query["role"],
+      documents: query["documents"],
       last_connection: query["last_connection"],
     };
     return datosUsuario;

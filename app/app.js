@@ -17,6 +17,7 @@ export class Server {
     initializePassport(this.app);
     mongoConf(URL_MONGO);
     sessionConf(this.app, URL_MONGO);
+
     this.app.use("/api", apiRouter);
     const SWAGGER_CONFIG = {
       definition: {

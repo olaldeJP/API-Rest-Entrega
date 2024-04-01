@@ -34,6 +34,7 @@ export async function envioMail(req, res, next) {
   );
   next();
 }
+
 export async function cambiarRolUser(req, res, next) {
   try {
     const user = await usersService.cambiarRolUsuario(req.params.idUser);
@@ -52,6 +53,23 @@ export async function checkAdmin(req, res, next) {
       throw new NewError(
         ErrorType.FORBIDDEN_USER,
         "JUST ADMIN CAN CHANGE ROLES"
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+export async function checkDocuments(req, res, next) {
+  try {
+    const hasDocuments = await usersService.validoParaPremium(
+      req.params.idUser
+    );
+    if (hasDocuments) {
+      return next();
+    } else {
+      throw new NewError(
+        ErrorType.FORBIDDEN_USER,
+        "Files Required To Change To Premium"
       );
     }
   } catch (error) {
