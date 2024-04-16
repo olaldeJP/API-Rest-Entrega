@@ -22,7 +22,7 @@ sessionsRouter.use((req, res, next) => {
 });
 
 sessionsRouter.post(
-  "/loginPassport",
+  "/login",
   passport.authenticate("loginLocal", {
     failWithError: true,
   }),
